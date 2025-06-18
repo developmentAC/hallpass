@@ -5,7 +5,8 @@ Welcome to **Hall Pass** – A hilarious, strategic, and unpredictable school-li
 Navigate the wild world of high school, where every hallway hides a new opportunity (or disaster), and every decision can make you a legend or a laughingstock.
 
 ---
-![Hall Pass Logo](graphics/hallway_logo.png)
+
+![Hall Pass Logo](graphics/hallpass_logo.png)
 
 Date: 11 June 2025
 
@@ -25,15 +26,27 @@ Email: obonhamcarter at allegheny.edu
 
 ## 🎮 Introduction
 
-**Hall Pass** puts you in the sneakers of a student trying to survive and thrive through a day at school.  
-Will you ace the pop quiz, pull off a daring milk heist, or challenge the principal to a showdown?  
-Every event is random, every choice matters, and your stats (popularity, money, grades) are always on the line!
+**Hall Pass** puts you in the sneakers of a student trying to survive and thrive through a day at school. Will you ace the pop quiz, pull off a daring milk heist, or challenge the principal to a showdown? You are trying to maintain your popularity, money, and grades, in addition to trying to impress the lovely Charlotte, the (potential) love of your life! Every event is random, every choice matters, and your stats (popularity, money, grades) are always on the line!
+
+![Hall Pass Logo](graphics/gameplay.png)
+
+This game is a love letter to the classic text-based games of yore, infused with a modern twist of humor and strategy. Whether you're a seasoned gamer or new to the world of Rust, **Hall Pass** offers a unique experience that combines nostalgia with fresh gameplay.
+
+This game is designed to be fun, engaging, and a little bit chaotic. You never know what will happen next, and that's part of the charm!
 
 This game is packed with:
+
 - Ironic and funny random events
 - Strategic choices with unpredictable outcomes
 - Dynamic stat tracking
 - A retro text-based interface
+- interactivity that keeps you on your toes
+- A light-hearted take on high school life
+- A chance to impress Charlotte, the love interest of your character
+- A nostalgic nod to classic text-based games
+- A unique blend of humor and strategy
+- A game that is easy to pick up but hard to master
+- A game that is fun to play with friends or solo
 
 ## 🚀 Getting Started
 
