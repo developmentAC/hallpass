@@ -46,7 +46,7 @@ This game is packed with:
 
 1. **Clone the repository:**
    ```sh
-   git clone repo
+   git clone git@github.com:developmentAC/hallpass.git
    cd hall_pass
    ```
 

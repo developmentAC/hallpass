@@ -115,8 +115,8 @@ fn main() {
         println!("{CYAN}\n Choose your action:{RESET}");
         println!("{YELLOW} 1. Dodge Bullies{RESET}");
         println!("{YELLOW} 2. Milk Heist{RESET}");
-        println!("{YELLOW} 3. Test Cheating{RESET}");
-        println!("{YELLOW} 4. Charlotte Flirt{RESET}");
+        println!("{YELLOW} 3. Cheat on a test{RESET}");
+        println!("{YELLOW} 4. Flirt with Charlotte{RESET}");
         println!("{YELLOW} 5. Visit Item Shop{RESET}");
         println!("{YELLOW} 6. Skip Day{RESET}");
         println!("{YELLOW} 7. Confront Bullies (Fight or Distract){RESET}");
