@@ -15,7 +15,7 @@ const BOLD: &str = "\x1b[1m";
 
 // Player struct holds all player stats and state
 #[derive(Debug, Clone)]
-struct Player {
+pub struct Player {
     name: String,
     str_: u8, // Strength
     int_: u8, // Intelligence
@@ -30,6 +30,13 @@ struct Player {
     reputation: i32,
 }
 
+#[derive(Debug)]
+pub struct PlayerStats {
+    pub money: i32,
+    pub popularity: i32,
+    pub grades: i32,
+}
+
 // Bully struct for adversaries
 #[derive(Debug)]
 struct Bully {
@@ -37,6 +44,26 @@ struct Bully {
     str_: u8,
     // int_: u8, //never used?
     // cha: u8, //never used?
+}
+
+// ShopItem struct for items in the shop
+#[derive(Debug)]
+pub struct ShopItem {
+    pub name: &'static str,
+    pub description: &'static str,
+    pub cost: i32,
+    pub popularity_change: i32,
+    pub grades_change: i32,
+    pub money_change: i32,
+}
+
+impl ShopItem {
+    pub fn apply(&self, player: &mut Player) {
+        player.money -= self.cost;
+        player.popularity += self.popularity_change;
+        player.grades += self.grades_change;
+        player.money += self.money_change;
+    }
 }
 
 // Main game loop and menu
@@ -92,7 +119,7 @@ fn main() {
             );
             break;
         }
-        if player.relationship_charlotte >= 10 {
+        if player.relationship_charlotte >= 30 {
             println!("{MAGENTA}You have won Charlotte's heart! You win!{RESET}");
             break;
         }
@@ -215,13 +242,17 @@ fn character_creation() -> Player {
 fn show_status(player: &Player) {
     // Print stats with color
     println!(
-        "{} {}  {} {}  {} {}",
+        "  {} {}\n  {} {}\n  {} {}\n  {} {}",
         "Money:".bold().bright_blue().on_bright_green(),
         player.money.to_string().bold().bright_blue().on_bright_green(),
         "Popularity:".bold().bright_yellow().on_bright_blue(),
         player.popularity.to_string().bold().bright_yellow().on_bright_blue(),
         "Grades:".bold().bright_yellow().on_bright_purple(),
-        player.grades.to_string().bold().bright_yellow().on_bright_purple()
+        player.grades.to_string().bold().bright_yellow().on_bright_purple(),
+        "Charlotte's Interest in you:".bold().bright_cyan().on_bright_magenta(),
+        player.relationship_charlotte.to_string().bold().bright_cyan().on_bright_magenta(),
+
+        //player.relationship_charlotte
     );
 }
 
@@ -346,8 +377,43 @@ fn charlotte_flirt(player: &mut Player) {
 }
 
 // Event: Visit the item shop (stub for expansion)
-fn item_shop(_player: &mut Player) {
+fn item_shop(player: &mut Player) {
     println!("The item shop is under construction.");
+    let items = get_shop_items();
+    println!("Available items:");
+    for item in &items {
+        println!(
+            "{} - {} (Cost: ${})",
+            item.name.bright_yellow(),
+            item.description.bright_white(),
+            item.cost
+        );
+    }
+
+    let choice = get_input("Enter the name of the item to buy, or 'exit' to leave: ");
+    if choice.trim().to_lowercase() == "exit" {
+        return;
+    }
+
+    // Find the item
+    let item = items.iter().find(|i| i.name == choice.trim());
+    match item {
+        Some(i) => {
+            // Check if player has enough money
+            if player.money >= i.cost {
+                // Apply the item's effects
+                i.apply(player);
+                println!(
+                    "You bought {}! {}",
+                    i.name.bright_yellow(),
+                    "Enjoy your new item!".green()
+                );
+            } else {
+                println!("{RED}You don't have enough money!{RESET}");
+            }
+        }
+        None => println!("{RED}Item not found.{RESET}"),
+    }
 }
 
 // Event: Random event placeholder (expand as needed)
@@ -564,13 +630,6 @@ pub struct Event {
 pub struct Choice {
     pub description: &'static str,
     pub effect: fn(&mut PlayerStats, &mut rand::rngs::ThreadRng) -> String,
-}
-
-// Example PlayerStats struct (adjust as needed)
-pub struct PlayerStats {
-    pub money: i32,
-    pub popularity: i32,
-    pub grades: i32,
 }
 
 // Example event list with random increments/decrements
@@ -1200,4 +1259,173 @@ pub fn get_random_event() -> Event {
     ]; // OBC CLOSE events vec!
 
     events.choose(&mut rand::thread_rng()).unwrap().clone()
+}
+
+// Shop items for the item shop
+pub fn get_shop_items() -> Vec<ShopItem> {
+    vec![
+        ShopItem {
+            name: "Designer Deodorant",
+            description: "Smell like you showered, even if you didn’t.",
+            cost: 10,
+            popularity_change: 5,
+            grades_change: 0,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Homework Subscription Service",
+            description: "Why do your own work when you can rent someone else’s brain?",
+            cost: 30,
+            popularity_change: -2,
+            grades_change: 8,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Limited Edition Meme T-Shirt",
+            description: "Because nothing says ‘cool’ like a joke that’s already old.",
+            cost: 15,
+            popularity_change: 4,
+            grades_change: -1,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Energy Drink 6-Pack",
+            description: "Stay awake in class, or at least vibrate through it.",
+            cost: 12,
+            popularity_change: 0,
+            grades_change: 3,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Fake Designer Backpack",
+            description: "Looks expensive, falls apart instantly.",
+            cost: 20,
+            popularity_change: 3,
+            grades_change: 0,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Influencer Starter Kit",
+            description: "Ring light, selfie stick, and a dream.",
+            cost: 25,
+            popularity_change: 2,
+            grades_change: 0,
+            money_change: 5, // Potential to make money
+        },
+        ShopItem {
+            name: "Mystery Meat Cafeteria Coupon",
+            description: "Eat it on a dare, become a legend.",
+            cost: 5,
+            popularity_change: 6,
+            grades_change: -2,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Study Buddy Plush Toy",
+            description: "Because you need someone to blame for your bad grades.",
+            cost: 8,
+            popularity_change: 2,
+            grades_change: 2,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Hall Pass Forgery Kit",
+            description: "For when you need to be anywhere but class.",
+            cost: 18,
+            popularity_change: -3,
+            grades_change: -4,
+            money_change: 10, // Sell passes
+        },
+        ShopItem {
+            name: "Cool Kid Sunglasses",
+            description: "Worn indoors for maximum irony.",
+            cost: 14,
+            popularity_change: 5,
+            grades_change: -1,
+            money_change: 0,
+        },
+        // Negative impact items
+        ShopItem {
+            name: "Suspicious Energy Pills",
+            description: "Guaranteed to keep you up... or knock you out.",
+            cost: 7,
+            popularity_change: -2,
+            grades_change: -3,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Unlicensed Mixtape",
+            description: "Play it loud, lose friends fast.",
+            cost: 3,
+            popularity_change: -5,
+            grades_change: 0,
+            money_change: 0,
+        },
+        ShopItem {
+            name: "Counterfeit Lunch Ticket",
+            description: "Risk it for a free meal.",
+            cost: 2,
+            popularity_change: -3,
+            grades_change: -2,
+            money_change: 5,
+        },
+        ShopItem {
+            name: "Cheesy Pickup Line Book",
+            description: "For when you want to be remembered... for the wrong reasons.",
+            cost: 6,
+            popularity_change: -4,
+            grades_change: 0,
+            money_change: 0,
+        },
+    ]
+}
+
+// use std::io::{self, Write};
+
+pub fn shop_menu(player: &mut Player) {
+    let items = get_shop_items();
+
+    println!("\n--- School Shop ---");
+    for (i, item) in items.iter().enumerate() {
+        println!(
+            "{}. {} ({} coins)\n   {}\n",
+            i + 1,
+            item.name,
+            item.cost,
+            item.description
+        );
+    }
+    println!("0. Exit shop");
+
+    loop {
+        print!("Select an item to purchase (by number): ");
+        io::stdout().flush().unwrap();
+
+        let mut input = String::new();
+        io::stdin().read_line(&mut input).unwrap();
+        let trimmed = input.trim();
+
+        if trimmed == "0" {
+            println!("Leaving the shop.\n");
+            break;
+        }
+
+        match trimmed.parse::<usize>() {
+            Ok(num) if num >= 1 && num <= items.len() => {
+                let item = &items[num - 1];
+                // Check if player has enough money
+                if player.money >= item.cost {
+                    // Apply the item's effects
+                    item.apply(player);
+                    println!(
+                        "You bought {}! (Popularity: {}, Grades: {}, Money: {})\n",
+                        item.name, player.popularity, player.grades, player.money
+                    );
+                } else {
+                    println!("Not enough money for {}!\n", item.name);
+                }
+            }
+            _ => println!("Invalid selection. Try again.\n"),
+        }
+    }
 }
