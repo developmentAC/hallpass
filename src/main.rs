@@ -2,7 +2,7 @@
 
 use colored::*;
 use rand::Rng;
-// use rand::seq::SliceRandom;
+use rand::seq::SliceRandom;
 use std::io::{self, Write};
 
 // Terminal color and style constants for output formatting
@@ -73,7 +73,11 @@ fn main() {
     // Print game title
     println!(
         "{}",
-        "Welcome to Hall Pass!".bold().underline().bright_yellow().on_green()
+        "Welcome to Hall Pass!"
+            .bold()
+            .underline()
+            .bright_yellow()
+            .on_green()
     );
     // Character creation at game start
     let mut player = character_creation();
@@ -246,18 +250,39 @@ fn show_status(player: &Player) {
     println!(
         "  {} {}\n  {} {}\n  {} {}\n  {} {}",
         "Money:".bold().bright_blue().on_bright_green(),
-        player.money.to_string().bold().bright_blue().on_bright_green(),
+        player
+            .money
+            .to_string()
+            .bold()
+            .bright_blue()
+            .on_bright_green(),
         "Popularity:".bold().bright_yellow().on_bright_blue(),
-        player.popularity.to_string().bold().bright_yellow().on_bright_blue(),
+        player
+            .popularity
+            .to_string()
+            .bold()
+            .bright_yellow()
+            .on_bright_blue(),
         "Grades:".bold().bright_yellow().on_bright_purple(),
-        player.grades.to_string().bold().bright_yellow().on_bright_purple(),
-        "Charlotte's Interest in you:".bold().bright_cyan().on_bright_magenta(),
-        player.relationship_charlotte.to_string().bold().bright_cyan().on_bright_magenta(),
-
+        player
+            .grades
+            .to_string()
+            .bold()
+            .bright_yellow()
+            .on_bright_purple(),
+        "Charlotte's Interest in you:"
+            .bold()
+            .bright_cyan()
+            .on_bright_magenta(),
+        player
+            .relationship_charlotte
+            .to_string()
+            .bold()
+            .bright_cyan()
+            .on_bright_magenta(),
         //player.relationship_charlotte
     );
 }
-
 
 // // Display current player stats
 // (alternative version with different colors)
@@ -273,7 +298,6 @@ fn show_status(player: &Player) {
 //         player.grades.to_string().cyan().bold()
 //     );
 // }
-
 
 // Event: Try to dodge a random bully
 fn dodge_bullies(player: &mut Player, bullies: &[Bully]) {
@@ -350,11 +374,13 @@ fn test_cheating(player: &mut Player) {
 
 // Event: Attempt to flirt with Charlotte
 fn charlotte_flirt(player: &mut Player) {
-
     if player.popularity < 20 {
         println!(
             "\n{}",
-            "Sadly, you do not have enough popularity to try for Charlotte's heart!".bold().bright_cyan().on_bright_magenta()
+            "Sadly, you do not have enough popularity to try for Charlotte's heart!"
+                .bold()
+                .bright_cyan()
+                .on_bright_magenta()
         ); // was bright_magenta()
         return;
     }
@@ -422,10 +448,7 @@ fn item_shop(player: &mut Player) {
 fn random_event(player: &mut Player) {
     let event = get_random_event();
     // Print event description
-    println!(
-        "\n{}\n",
-        event.description.bold().bright_white().on_blue()
-    );
+    println!("\n{}\n", event.description.bold().bright_white().on_blue());
 
     // Print choices with color
     for (i, choice) in event.choices.iter().enumerate() {
@@ -437,10 +460,7 @@ fn random_event(player: &mut Player) {
     }
 
     // Prompt for input
-    println!(
-        "{}",
-        "Enter your choice:".bold().bright_cyan().on_yellow()
-    );
+    println!("{}", "Enter your choice:".bold().bright_cyan().on_yellow());
 
     let choice_num = get_input("Choose an option: ");
     if let Ok(index) = choice_num.parse::<usize>() {
@@ -636,7 +656,7 @@ pub struct Choice {
 
 // Example event list with random increments/decrements
 pub fn get_random_event() -> Event {
-    use rand::seq::SliceRandom;
+    // use rand::seq::SliceRandom; //defined above
 
     let events = vec![
         Event {
@@ -1072,8 +1092,7 @@ pub fn get_random_event() -> Event {
                         )
                     },
                 },
-
-//
+                //
                 Choice {
                     description: "Cheat on the quiz (which may hurt your popularity!)",
                     effect: |stats, rng| {
@@ -1085,10 +1104,7 @@ pub fn get_random_event() -> Event {
                         )
                     },
                 },
-
-//
-
-
+                //
             ],
         },
         Event {
