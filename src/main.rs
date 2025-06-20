@@ -140,7 +140,7 @@ fn main() {
 
         // Random event with 95% chance
         if rand::thread_rng().gen_bool(0.95) {
-            println!("⚡️  {BOLD}{CYAN}A random event occurs!{RESET}");
+            println!("\n  ⚡️  {BOLD}{CYAN}A random event occurs!{RESET}");
             random_event(&mut player);
         }
 
@@ -217,7 +217,7 @@ fn character_creation() -> Player {
     loop {
         let choice = get_input("Enter 1-4: ");
         let (str_, int_, cha) = match choice.trim() {
-            "1" => (8, 4, 4),
+            "1" => (8, 4, 4), // values are for creating initial player stats
             "2" => (3, 9, 4),
             "3" => (4, 4, 8),
             "4" => (5, 5, 5),
@@ -331,7 +331,8 @@ fn milk_heist(player: &mut Player) {
         let money_gain = rand::thread_rng().gen_range(8..=15);
         let attn_gain = rand::thread_rng().gen_range(1..=4);
         let rep_gain = rand::thread_rng().gen_range(1..=2);
-        println!("Success! You sell the milk on the black market.");
+        // println!("Success! You sell the milk on the black market.");
+        println!(" {GREEN}Success! You sell the milk on the black market.{RESET}");
         player.money += money_gain;
         player.attention += attn_gain;
         player.reputation += rep_gain;
@@ -339,7 +340,8 @@ fn milk_heist(player: &mut Player) {
         let money_loss = rand::thread_rng().gen_range(2..=5);
         let attn_gain = rand::thread_rng().gen_range(3..=6);
         let pop_loss = rand::thread_rng().gen_range(1..=2);
-        println!("Caught by the lunch lady! You lose money and gain attention.");
+        // println!("Caught by the lunch lady! You lose money and gain attention.");
+        println!("{RED}Caught by the lunch lady! You lose money and gain attention.{RESET}");
         player.money -= money_loss;
         player.attention += attn_gain;
         player.popularity -= pop_loss;
@@ -513,19 +515,30 @@ fn random_event(player: &mut Player) {
     } else {
         println!("Invalid input.");
     }
-// report player stats: OBC
+// begin of report player stats
     println!(
         "\n{}",
         "  Current Player Stats:".bold().bright_blue().on_bright_white()
     );
     show_status(player);
-// report player stats: OBC
+// end of report player stats
 
 }
 
 // Event: Bullies or principal may show up after certain actions (stub)
 fn bullies_or_principal_event(_player: &mut Player, _bullies: &[Bully], _context: &str) {
     // Implement as needed
+
+// choose whether it is the principal or bullies that confront the player
+    if rand::thread_rng().gen_bool(0.5) {
+        // println!("{RED}The principal confronts you!{RESET}");
+        confront_principal(_player);
+    } else {
+        // println!("{RED}You are confronted by bullies!{RESET}");
+        confront_bullies(_player, _bullies);
+    }
+
+
 }
 
 // Event: Principal confrontation after skipping day (stub)
@@ -546,12 +559,12 @@ fn get_input(prompt: &str) -> String {
 // Confront bullies: fight or distract to escape
 fn confront_bullies(player: &mut Player, bullies: &[Bully]) {
     let bully = &bullies[rand::thread_rng().gen_range(0..bullies.len())];
-    println!("{RED}You are confronted by bully {}!{RESET}", bully.name);
+    println!("  {RED}You are confronted by bully {}!{RESET}", bully.name);
 
     loop {
-        println!("Do you want to:");
-        println!("1. Fight");
-        println!("2. Throw a paper airplane to distract and escape");
+        println!(" Do you want to:");
+        println!("  1. Fight");
+        println!("  2. Throw a paper airplane to distract and escape");
         let choice = get_input("Choose (1 or 2): ");
         match choice.trim() {
             "1" => {
@@ -565,12 +578,12 @@ fn confront_bullies(player: &mut Player, bullies: &[Bully]) {
                 } else {
                     let damage = rand::thread_rng().gen_range(6..=12);
                     let attn_gain = rand::thread_rng().gen_range(2..=5);
-                    println!("{RED}You lose the fight and get roughed up!{RESET}");
+                    println!("  {RED}You lose the fight and get roughed up!{RESET}");
                     player.money -= damage;
                     player.attention += attn_gain;
                     // Optionally allow to continue fighting or escape
-                    println!("Do you want to keep fighting (1) or try to escape (2)?");
-                    let next = get_input("Choose (1 or 2): ");
+                    println!("  Do you want to keep fighting (1) or try to escape (2)?");
+                    let next = get_input("  Choose (1 or 2): ");
                     if next.trim() == "2" {
                         continue; // Go back to the loop for distraction option
                     }
@@ -580,28 +593,28 @@ fn confront_bullies(player: &mut Player, bullies: &[Bully]) {
                 let distract_chance = player.int_ as i32 * 8 + player.cha as i32 * 5 + 20;
                 let roll = rand::thread_rng().gen_range(1..=100);
                 if roll <= distract_chance {
-                    println!("{CYAN}Your distraction works! You escape the bullies.{RESET}");
+                    println!(". {CYAN}Your distraction works! You escape the bullies.{RESET}");
                     break;
                 } else {
                     let pop_loss = rand::thread_rng().gen_range(1..=3);
-                    println!("{RED}Your distraction fails. The bullies catch you!{RESET}");
+                    println!("  {RED}Your distraction fails. The bullies catch you!{RESET}");
                     player.popularity -= pop_loss;
                     // Optionally, loop back for another choice
                 }
             }
-            _ => println!("Invalid choice."),
+            _ => println!("  Invalid choice."),
         }
     }
 }
 
 // Confront principal: fight or distract to escape
 fn confront_principal(player: &mut Player) {
-    println!("{RED}You are confronted by the principal!{RESET}");
+    println!(". {RED}You are confronted by the principal!{RESET}");
 
     loop {
-        println!("Do you want to:");
-        println!("1. Fight");
-        println!("2. Throw a paper airplane to distract and escape");
+        println!(" Do you want to:");
+        println!("  1. Fight");
+        println!("  2. Throw a paper airplane to distract and escape");
         let choice = get_input("Choose (1 or 2): ");
         match choice.trim() {
             "1" => {
