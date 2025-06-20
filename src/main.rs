@@ -513,6 +513,14 @@ fn random_event(player: &mut Player) {
     } else {
         println!("Invalid input.");
     }
+// report player stats: OBC
+    println!(
+        "\n{}",
+        "  Current Player Stats:".bold().bright_blue().on_bright_white()
+    );
+    show_status(player);
+// report player stats: OBC
+
 }
 
 // Event: Bullies or principal may show up after certain actions (stub)
