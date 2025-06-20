@@ -192,12 +192,12 @@ fn main() {
             player.warnings += 1;
             player.attention = 0;
             println!(
-                "{RED}Principal: This is your warning #{}!{RESET}",
+                "  {RED}Principal: This is your warning #{}!{RESET}",
                 player.warnings
             );
             if player.warnings >= 3 {
                 player.expelled = true;
-                println!("{RED}You have been expelled!{RESET}");
+                println!(" {RED}Oh no!! You have been expelled!{RESET}");
             }
         }
 
@@ -209,7 +209,7 @@ fn main() {
 fn character_creation() -> Player {
     println!("\n--- --- Character Creation --- ---");
     let name = get_input("Enter your name: ");
-    println!("Choose your persona:");
+    println!(" Choose your persona:");
     println!("  1. Jock (STR 8, INT 4, CHA 4)");
     println!("  2. Nerd (STR 3, INT 9, CHA 4)");
     println!("  3. Charmer (STR 4, INT 4, CHA 8)");
@@ -234,7 +234,8 @@ fn character_creation() -> Player {
             cha,
             money,
             grades: 70,
-            popularity: 0,
+            popularity: 5,// initial popularity
+            // popularity: 80, //used to test the game
             attention: 0,
             warnings: 0,
             expelled: false,
@@ -572,7 +573,7 @@ fn confront_bullies(player: &mut Player, bullies: &[Bully]) {
                 let roll = rand::thread_rng().gen_range(1..=100);
                 if roll <= fight_chance {
                     let pop_gain = rand::thread_rng().gen_range(3..=7);
-                    println!("{GREEN}You win the fight! Your popularity soars!{RESET}");
+                    println!("{GREEN}You win the fight! Your popularity soars ({POP_GAIN}) point!{RESET}",POP_GAIN = pop_gain);
                     player.popularity += pop_gain;
                     break;
                 } else {
@@ -622,8 +623,10 @@ fn confront_principal(player: &mut Player) {
                 let roll = rand::thread_rng().gen_range(1..=100);
                 if roll <= fight_chance {
                     let money_gain = rand::thread_rng().gen_range(10..=20);
-                    println!("{GREEN}You somehow win! You find some confiscated cash!{RESET}");
+                    let popularity_gain = rand::thread_rng().gen_range(5..=10);
+                    println!("{GREEN}You somehow win! You find some confiscated cash ({MONEY_GRAIN}) and earn some popularity ({POP_GAIN}) with your peers!{RESET}",POP_GAIN = popularity_gain, MONEY_GRAIN = money_gain);
                     player.money += money_gain;
+                    player.popularity += popularity_gain;
                     break;
                 } else {
                     let attn_gain = rand::thread_rng().gen_range(4..=8);

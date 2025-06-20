@@ -36,7 +36,7 @@ dependencies = [
 
 [[package]]
 name = "hall_pass"
-version = "0.1.25"
+version = "0.1.27"
 dependencies = [
  "colored",
  "rand",
